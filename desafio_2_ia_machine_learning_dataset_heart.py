@@ -14,13 +14,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, accuracy_score
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.utils import to_categorical
 
 # Carregar o dataset de doenças cardíacas
 url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data'
-colunas = ['idade', 'sexo', 'tipo_dor_peito', 'pressao_sanguinea_repouso', 'colesterol', 'acucar_sangue_jejum',
-           'resultado_eletrocardiografico', 'frequencia_cardiaca_maxima', 'angina_exercicio', 'depressao_st',
+colunas = ['idade', 'sexo', 'tipo_dor_peito', 'pressao_sanguinea_repouso', 'colesterol', 'acucar_sangue_jejum', 
+           'resultado_eletrocardiografico', 'frequencia_cardiaca_maxima', 'angina_exercicio', 'depressao_st', 
            'inclinação_st', 'vasos_cardiacos', 'talassemia', 'diagnostico_doenca_cardiaca']
 dados = pd.read_csv(url, names=colunas)
 
@@ -49,8 +49,11 @@ y_test_cat = to_categorical(y_test)
 # Criando o modelo de rede neural
 model = Sequential()
 
-# Adicionando camadas da rede neural
-model.add(Dense(64, input_shape=(X_train.shape[1],), activation='relu'))  # Primeira camada oculta
+# Adicionando a camada de entrada
+model.add(Input(shape=(X_train.shape[1],)))
+
+# Adicionando camadas ocultas
+model.add(Dense(64, activation='relu'))  # Primeira camada oculta
 model.add(Dense(32, activation='relu'))  # Segunda camada oculta
 model.add(Dense(y_train_cat.shape[1], activation='softmax'))  # Camada de saída (softmax para classificação multiclasses)
 
